@@ -3,14 +3,25 @@ import kotlin.math.*
 //_________________________________________________________________Klasse mit zwei Funktionen mit GETTER & SETTER
 class Kreis(
     radius :Double){
-   public var radius :Double=radius
+    init {                              // Gute Hilfe um den aktuellen zustand des Constructors genau zu ermitteln
+        println("Circle creation")
+        println(radius)
+        println(umpfangBerechnen())
+        println(areaBerechnen())
+    }
+
+    constructor(radius: Double, printMe: String): this(radius){
+        println(printMe)
+    }
+
+       var radius :Double=radius
        get() = field                        //__________________Getter
        set(value) {                         //__________________Setter
            if (value>=0.0){
                field = value
            }
        }
-    public var isValidCircle: Boolean = radius >=0.0
+        var isValidCircle: Boolean = radius >=0.0
         get() = radius >= 0.0
 
     fun umpfangBerechnen():Double{
@@ -23,8 +34,8 @@ class Kreis(
 
 fun main(args: Array<String>) {
 
-    var k: Kreis = Kreis(5.0)
-    k.radius = -10.0
+    var k = Kreis(5.0, "Probe")
+    k.radius = -3.0
     println(k.isValidCircle)
 
 println("Umpfang ist: ${k.umpfangBerechnen()} und die Fläche ist: ${k.areaBerechnen()}")
