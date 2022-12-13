@@ -1,21 +1,53 @@
 fun main(args: Array<String>) {
-var haha = Handy("IPhone8")
+val haha = Handy("IPhone8")
     haha.turnOn()
     haha.systemOS()
     haha.turnOff()
 
-var ando = Handy("Ando")
+val ando = Handy("Ando")
     ando.systemOS()
 
-var pc1 = Desktop()
+val pc1 = Desktop()
     pc1.systemOS()
 
-var tab = Tablet()
+val tab = Tablet()
     tab.systemOS()
+
+val myDevices : Array<Computer> = arrayOf(haha,pc1,tab,Handy("IPhoneX"))
+    for (i in myDevices){
+        println("Ausgabe ${i.systemOS()}")
+    }
+
+val pc2= Desktop()
+    pc2.connect()
+    pc2.systemOS()
+
+    var aktenkoffer:Aktenkoffer = Aktenkoffer()
+    aktenkoffer.insertLaptop(tab)
+    aktenkoffer.pullOutLaptop()?.systemOS()
+    println(aktenkoffer.pullOutLaptop()?.ram)
+
+
+
+/*_______________________________________TypeCast_Lektion_59________________________________*/
+val myPC: Desktop = pc1
+    if (myPC is Wifi){
+        println("Yoo ist ein Computer")
+    }
+
+    println(aktenkoffer.generateTablet())
+
+/*__________________________________TypeCast erzwingen______________________________________*/
+    var unsafeLaptop: Tablet = myPC as Tablet
+    println(unsafeLaptop)
+
+
+
 
 }
 
-open class Computer{
+
+open class Computer {
     open val prozessor = "M1X"
     open val ram = ""
     open val memory = ""
@@ -31,6 +63,11 @@ open class Computer{
     fun turnOff(){
         println("System turnt off")
     }
+
+    override fun toString(): String {
+        return "Computer(prozessor='$prozessor', ram='$ram', memory='$memory', preis=$preis, touchFunctionality='$touchFunctionality')"
+    }
+
 }
 /*__________________________________Handy-Class__________________________________________*/
 class Handy(var handyName: String): Computer() {
@@ -42,15 +79,15 @@ class Handy(var handyName: String): Computer() {
     override var preis = preisermittler(handyName)
     override val ram = ramermittler(handyName)
 
-    fun phoneValidator(handyName: String): String{
+    private fun phoneValidator(handyName: String): String{
         return if (handyName.startsWith("IPhone")) "IOS" else "Android"
     }
 
-    fun preisermittler(handyName: String): Int{
+    private fun preisermittler(handyName: String): Int{
         return if (handyName.startsWith("IPhone")) 1300 else 1000
     }
 
-    fun ramermittler(handyName: String): String{
+    private fun ramermittler(handyName: String): String{
         return if (handyName.startsWith("IPhone")) "8GB" else "16GB"
     }
 
@@ -64,7 +101,7 @@ class Handy(var handyName: String): Computer() {
     }
 }
 /*__________________________________Desktop-Class__________________________________________*/
-class Desktop: Computer(){
+class Desktop() : Computer(), Wifi{
     override val prozessor: String
         get() = super.prozessor
 
@@ -73,9 +110,16 @@ class Desktop: Computer(){
         set(value) {
             field =7} //herausfinden wie das funktioniert
 
+    override var connected: Boolean = false
+    override val cardname: String = "Gforce"
+    override fun connect() {
+        connected = true
+    }
 
     override fun systemOS() {
         println("Linux OS mit $prozessor und kostet $preis")
+        println(connected)
+        println(cardname)
     }
 }
 /*__________________________________Tablet-Class__________________________________________*/
@@ -87,4 +131,43 @@ class Tablet: Computer(){
 
     override var preis = 1200
 
+    override fun systemOS() {
+        println(super.prozessor)
+        super.systemOS()
+        println("-----------ENDE-----------")
+    }
+
 }
+
+interface Wifi{
+    var connected: Boolean
+    val cardname: String
+
+    fun connect()
+
+    fun printConnectedStatus(){
+        println("Connected? $connected")
+    }
+
+}
+
+class Aktenkoffer(){
+    lateinit var laptop: Tablet     // wird bei noch nicht initialisierten Variablen eingesetzt
+
+    fun insertLaptop(l: Tablet){    // funktion um Initialisierung zu machen
+        laptop=l
+    }
+    fun pullOutLaptop(): Tablet?{
+        if(this::laptop.isInitialized){
+            return laptop
+        }else{
+            return null
+        }
+    }
+}
+
+/*_______________________________________Extensions_____________ wurde außerhalb einer Class erstellt________________________*/
+fun Aktenkoffer.generateTablet() :Tablet{
+    return Tablet()
+}
+
