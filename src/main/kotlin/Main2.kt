@@ -1,8 +1,8 @@
 // Kotlin spezifische Features
-fun main(args: Array<String>) {
+fun main() {
 
     /*____________________________________________ Maybe Type - null */
-    var meinString: String? = null
+    var meinString: String? = "hallo"
     println(meinString?.length)
 
     //   println(meinString!!.length)  // Programm nimmt an, das der String nicht null ist --> Ergebnis ist eine Nullpointer Exception

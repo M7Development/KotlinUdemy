@@ -34,7 +34,7 @@ class Kreis(
 
 fun main(args: Array<String>) {
 
-    var k = Kreis(5.0, "Probe")
+    var k = Kreis(6.0, "Probe")
     k.radius = -3.0
     println(k.isValidCircle)
 
